@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 35;
+use Test::More tests => 36;
 use Pipe;
+use Data::Dumper;
 #$Pipe::DEBUG = 1;
 
 my $warn;
@@ -151,7 +152,6 @@ $SIG{__WARN__} = sub {$warn = shift;};
     my @input = Pipe->cat("t/data/file1", "t/data/file2")
                     ->map(  sub {{str => $_[0], long => length $_[0]}} );
     is $warn, '', "no warning";
-    use Data::Dumper;
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = map {{ str => $_, long => length $_}} <>;
     is_deeply \@input, \@expected, "reading two files and maping the lines";
@@ -181,6 +181,13 @@ $SIG{__WARN__} = sub {$warn = shift;};
     #my @all = Pipe->pairs(\@array_names, \@array_numbers);
     #my @expected = 
     
+}
+
+{
+    $warn = '';
+    my @files = Pipe->find("t");
+    diag Dumper \@files;
+    is $warn, '', "no warning";
 }
 
 

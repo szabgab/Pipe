@@ -10,6 +10,7 @@ lib/Pipe/Tube.pm
 
 lib/Pipe/Tube/Cat.pm
 lib/Pipe/Tube/Chomp.pm
+lib/Pipe/Tube/Find.pm
 lib/Pipe/Tube/For.pm
 lib/Pipe/Tube/Glob.pm
 lib/Pipe/Tube/Grep.pm

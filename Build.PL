@@ -12,6 +12,7 @@ my $builder = Module::Build->new(
     requires            => {
         'Want'                => '0',
         'Test::More'          => '0.47',
+        'File::Find::Rule'    => '0',
     },
 );
 
