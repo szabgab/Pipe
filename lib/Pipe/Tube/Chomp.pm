@@ -1,8 +1,8 @@
-package PIPE::Chomp;
+package Pipe::Tube::Chomp;
 use strict;
 use warnings;
 
-use base 'PIPE::Skeleton';
+use base 'Pipe::Tube';
 
 sub run {
     my ($self, @input) = @_;

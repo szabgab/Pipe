@@ -1,8 +1,8 @@
-package PIPE::Map;
+package Pipe::Tube::Map;
 use strict;
 use warnings;
 
-use base 'PIPE::Skeleton';
+use base 'Pipe::Tube';
 
 sub init {
     my ($self, $expr) = @_;

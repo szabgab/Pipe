@@ -1,6 +1,8 @@
-package PIPE::Print;
+package Pipe::Tube::Print;
 use strict;
 use warnings;
+
+use base 'Pipe::Tube';
 
 sub add {
     my ($self, $file) = @_;

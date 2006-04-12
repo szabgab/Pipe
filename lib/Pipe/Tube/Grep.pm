@@ -1,8 +1,8 @@
-package PIPE::Grep;
+package Pipe::Tube::Grep;
 use strict;
 use warnings;
 
-use base 'PIPE::Skeleton';
+use base 'Pipe::Tube';
 
 sub init {
     my ($self, $expr) = @_;

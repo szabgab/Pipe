@@ -1,9 +1,11 @@
-package PIPE;
+package Pipe;
 use strict;
 use warnings;
 
 use Want qw(want);
 our $DEBUG;
+
+our $VERSION = '0.01';
 
 sub _log {
     my ($self, $msg, $class) = @_;
@@ -20,7 +22,7 @@ AUTOLOAD {
     my $module = $AUTOLOAD;
     $module =~ s/.*:://;
     $module =~ s/=.*//;
-    my $class = "PIPE::" . ucfirst $module;
+    my $class = "Pipe::Tube::" . ucfirst $module;
     $self->_log("AUTOLOAD: '$AUTOLOAD', module: '$module', class: '$class'");
     eval "use $class";
     die "Could not load '$class' $@\n" if $@;
@@ -28,15 +30,15 @@ AUTOLOAD {
     # let user register pipes ?
     # check if this pipe is registered?
 
-    if ($self eq "PIPE") {
-        $self = bless {}, "PIPE";
+    if ($self eq "Pipe") {
+        $self = bless {}, "Pipe";
     }
     my $last_thingy = (want('VOID') or want('LIST') or (want('SCALAR') and not want('OBJECT')) ? 1 : 0);
     $self->_log("context: $_: " . want($_)) for (qw(VOID SCALAR LIST OBJECT));
 
     $self->_log("params: " . join "|", @_);
     my $obj = $class->new(@_);
-    push @{ $self->{PIPE} }, $obj;
+    push @{ $self->{Pipe} }, $obj;
 
     if ($last_thingy) {
         $self->_log("last thingy");
@@ -47,31 +49,31 @@ AUTOLOAD {
 
 sub run_pipe {
     my ($self) = @_;
-    $self->_log("PIPE::run called");
-    return if not @{ $self->{PIPE} };
+    $self->_log("Pipe::run_pipe called");
+    return if not @{ $self->{Pipe} };
 
-    my $in = shift @{ $self->{PIPE} };
+    my $in = shift @{ $self->{Pipe} };
     my $in_finished = 0;
     my @results;
     while (1) {
-        $self->_log("PIPE::run calls in: $in");
+        $self->_log("Pipe::run_pipe calls in: $in");
         my @res = $in->run;
-        $self->_log("PIPE::run resulted in " . join "|", @res);
+        $self->_log("Pipe::run_pipe resulted in " . join "|", @res);
         if (not @res) {
             @res = $in->finish();
             $in_finished = 1;
         }
-        foreach my $i (0..@{ $self->{PIPE} }-1) {
-            my $call = $self->{PIPE}[$i];
-            $self->_log("PIPE::run calls: $call");
+        foreach my $i (0..@{ $self->{Pipe} }-1) {
+            my $call = $self->{Pipe}[$i];
+            $self->_log("Pipe::run_pipe calls: $call");
             @res = $call->run(@res);
-            $self->_log("PIPE::run results: {" . join("}{", @res) . "}");
+            $self->_log("Pipe::run_pipe results: {" . join("}{", @res) . "}");
             last if not @res;
         }
         push @results, @res;
         if ($in_finished) {
             $self->_log("IN finished");
-            $in = shift @{ $self->{PIPE} };
+            $in = shift @{ $self->{Pipe} };
             last if not defined $in;
             $in_finished = 0;
         }
@@ -88,16 +90,17 @@ DESTROY {
 
 =head1 NAME
 
-PIPE - Framework to create lazy pipes as iterators
+Pipe - Framework to create pipes using iterators
 
 =head1 SYNOPSIS
 
- use PIPE;
- my @input = PIPE->cat("t/data/file1", "t/data/file2");
- my @lines = PIPE->cat("t/data/file1", "t/data/file2")->chomp;
- my @uniqs = PIPE->cat("t/data/file1", "t/data/file2")->chomp->uniq;
+ use Pipe;
+ my @input = Pipe->cat("t/data/file1", "t/data/file2");
+ my @lines = Pipe->cat("t/data/file1", "t/data/file2")->chomp;
+ my @uniqs = Pipe->cat("t/data/file1", "t/data/file2")->chomp->uniq;
 
- PIPE->cat("t/data/file1", "t/data/file2")->uniq->print("t/data/out");
+ Pipe->cat("t/data/file1", "t/data/file2")->uniq->print("t/data/out");
+
 
 
 =head1 WARNING
@@ -106,21 +109,21 @@ This is Alpha version. The user API might still change
 
 =head1 DESCRIPTION
 
-Build a low memory consumption iterating pipe with prebuilt tubes and add
-your own kit.
+Building an iterating pipe with prebuilt and home made tubes.
 
 Currently available tubes:
 
-=head2 PIPE::Cat
+=head2 Pipe::Cat
 
 Read in the lines of one or more file.
 
+=head2 Pipe::Chomp
 
-=head2 PIPE::Chomp
+Remove trailing newlines from each line.
 
-Remove trailing newlines from each line
+=head2 Pipe::Grep
 
-=head2 PIPE::Grep
+Selectively pass on values.
 
 Can be used either with a regex:
 
@@ -128,28 +131,34 @@ Can be used either with a regex:
 
 Or with a sub:
 
- ->grep( sub { length($_) > 12 } )
+ ->grep( sub { length($_[0]) > 12 } )
 
 
+Very similar to the built-in grep command of Perl but instead of regex
+you have to pass a compiled regex using qr// and instead of a block you
+have to pass an anonymous   sub {}
 
-=head2 PIPE::Uniq
+=head2 Pipe::Uniq
 
 Similary to the unix uniq command eliminate duplicate conscutive values.
 
 23, 23, 19, 23     becomes  23, 19, 23
 
+Warning: as you can see from the example this method does not give real unique
+values, it only eliminates consecutive duplicates.
+
 
 =head1 How to build your own tube ?
 
 If you would like to add a tube called "thing" create a module called 
-PIPE::Thing that inherits from PIPE::Skeleton.
+Pipe::Tube::Thing that inherits from Pipe::Tube, our abstract Tube.
 
-Implement on or more of these methods in your subclass as you please.
+Implement one or more of these methods in your subclass as you please.
 
 =head2 init
 
 Will be called once when initializing the pipeline. 
-It will get ($self, @args)  where $self is the PIPE::Thing object
+It will get ($self, @args)  where $self is the Pipe::Thing object
 and @args are the values given as parameters to the ->thing(@args) call.
 
 
@@ -168,7 +177,7 @@ passed on to the next thingy.
 =head2 Debugging your tube
 
 You can call $self->_log("some message") from your tube. It will be printed to STDOUT
-if someone sets $PIPE::DEBUG = 1;
+if someone sets $Pipe::DEBUG = 1;
 
 =head1 BUGS
 
@@ -214,12 +223,12 @@ L<Shell::Autobox>
 #    until it has all the its input data ready and thus its finish method was called
 # The finish method also returns the output or () if notthing to say
 # 
-# the PIPE manager can recognize that a Pipe element finished if it is the first element (so it has nothing 
+# the Pipe manager can recognize that a Pipe element finished if it is the first element (so it has nothing 
 #    else to wait for) and its run method returned (). Then its finish method is called and it is dropped
 #    
-# the PIPE can easily recognize which is the first piece (it is called as class method)
+# the Pipe can easily recognize which is the first piece (it is called as class method)
 # 
-# the PIPE needs to recognize what is the last call, we can enforce it by a speciall call ->run
+# the Pipe needs to recognize what is the last call, we can enforce it by a speciall call ->run
 #      but if would be also nice to recognize it in other way
 #      using the Want module: 
 #      $o->thing         VOID
@@ -228,6 +237,13 @@ L<Shell::Autobox>
 #      @ret = $o->thing  LIST
 
 #      $o->thing->other  SCALAR and OBJECT
+
+# TODO 
+#   find
+#   flat (put in after a sort and it will flaten out the calls.
+#   Pipe->sub( sub {} ) can get any subroutine and will insert it in the pipe
+#   split up the input stream
+# process groups of values
 
 
 

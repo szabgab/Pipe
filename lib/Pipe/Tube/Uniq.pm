@@ -1,8 +1,8 @@
-package PIPE::Uniq;
+package Pipe::Tube::Uniq;
 use strict;
 use warnings;
 
-use base 'PIPE::Skeleton';
+use base 'Pipe::Tube';
 
 sub run {
     my ($self, @input) = @_;

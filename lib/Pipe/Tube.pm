@@ -1,8 +1,8 @@
-package PIPE::Skeleton;
+package Pipe::Tube;
 use strict;
 use warnings;
 
-use PIPE;
+use Pipe;
 
 sub new {
     my ($class, $pipe, @args) = @_;
@@ -27,7 +27,7 @@ sub finish {
 
 sub _log {
     my ($self, $msg) = @_;
-    PIPE->_log($msg, $self);
+    Pipe->_log($msg, $self);
 }
 
 

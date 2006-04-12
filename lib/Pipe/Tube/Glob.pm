@@ -1,8 +1,8 @@
-package PIPE::Glob;
+package Pipe::Tube::Glob;
 use strict;
 use warnings;
 
-use base 'PIPE::Skeleton';
+use base 'Pipe::Tube';
 
 sub init {
     my ($self, @patterns) = @_;

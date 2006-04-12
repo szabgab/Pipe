@@ -1,8 +1,8 @@
-package PIPE::For;
+package Pipe::Tube::For;
 use strict;
 use warnings;
 
-use base 'PIPE::Skeleton';
+use base 'Pipe::Tube';
 
 sub init {
     my ($self, @values) = @_;

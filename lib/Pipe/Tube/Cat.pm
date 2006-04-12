@@ -1,8 +1,8 @@
-package PIPE::Cat;
+package Pipe::Tube::Cat;
 use strict;
 use warnings;
 
-use base 'PIPE::Skeleton';
+use base 'Pipe::Tube';
 
 sub init {
     my ($self, @files) = @_;
@@ -40,7 +40,7 @@ sub _next_file {
         if (open my $fh, "<", $file) {
             return $self->{fh} = $fh;
         } else {
-            print STDERR $@;
+            print STDERR $!;
         }
     }
 }
