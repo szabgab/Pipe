@@ -1,0 +1,24 @@
+Build.PL
+MANIFEST			This list of files
+META.yml
+README
+Makefile.PL
+Changes
+
+lib/Pipe.pm
+lib/Pipe/Tube.pm
+
+lib/Pipe/Tube/Cat.pm
+lib/Pipe/Tube/Chomp.pm
+lib/Pipe/Tube/For.pm
+lib/Pipe/Tube/Glob.pm
+lib/Pipe/Tube/Grep.pm
+lib/Pipe/Tube/Map.pm
+lib/Pipe/Tube/Print.pm
+lib/Pipe/Tube/Sort.pm
+lib/Pipe/Tube/Uniq.pm
+
+t/pipe.t
+t/data/file1
+t/data/file2
+t/data/numbers1

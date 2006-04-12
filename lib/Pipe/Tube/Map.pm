@@ -6,7 +6,7 @@ use base 'Pipe::Tube';
 
 sub init {
     my ($self, $expr) = @_;
-    $self->_log("Receiving the map expression: $expr");
+    $self->logger("Receiving the map expression: $expr");
     $self->{expr} = $expr;
     return $self;
 }
@@ -14,7 +14,7 @@ sub init {
 sub run {
     my ($self, @input) = @_;
 
-    $self->_log("The map expression: $self->{expr}");
+    $self->logger("The map expression: $self->{expr}");
     if ("Regexp" eq ref $self->{expr}) {
         return map /$self->{expr}/, @input;
     } else {

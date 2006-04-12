@@ -6,7 +6,7 @@ use base 'Pipe::Tube';
 
 sub init {
     my ($self, $expr) = @_;
-    $self->_log("Receiving the grep expression: $expr");
+    $self->logger("Receiving the grep expression: $expr");
     $self->{expr} = $expr;
     return $self;
 }
@@ -14,7 +14,7 @@ sub init {
 sub run {
     my ($self, @input) = @_;
 
-    $self->_log("The grep expression: $self->{expr}");
+    $self->logger("The grep expression: $self->{expr}");
     if ("Regexp" eq ref $self->{expr}) {
         return grep /$self->{expr}/, @input;
     } else {

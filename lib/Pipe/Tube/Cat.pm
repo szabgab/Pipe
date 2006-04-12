@@ -25,7 +25,7 @@ sub run {
         return if not $fh;
         my $row = <$fh>;
         if (defined $row) {
-            $self->_log("Row read: $row");
+            $self->logger("Row read: $row");
             return $row;
         } else {
             $fh = undef;
@@ -36,11 +36,11 @@ sub run {
 sub _next_file {
     my ($self) = @_;
     while (my $file = shift @{ $self->{files} }) {
-        $self->_log("Opening file '$file'");
+        $self->logger("Opening file '$file'");
         if (open my $fh, "<", $file) {
             return $self->{fh} = $fh;
         } else {
-            print STDERR $!;
+            warn "Could not open '$file'. $!\n";
         }
     }
 }

@@ -6,7 +6,7 @@ use base 'Pipe::Tube';
 
 sub init {
     my ($self, $expr) = @_;
-    $self->_log("Receiving the sort expression: '" . (defined $expr ? $expr : '') .  "'");
+    $self->logger("Receiving the sort expression: '" . (defined $expr ? $expr : '') .  "'");
     $self->{expr} = $expr;
     $self->{data} = [];
     return $self;
@@ -20,7 +20,7 @@ sub run {
 
 sub finish {
     my ($self) = @_;
-    $self->_log("The sort expression: " . (defined $self->{expr} ? $self->{expr} : ''));
+    $self->logger("The sort expression: " . (defined $self->{expr} ? $self->{expr} : ''));
     my $sub = $self->{expr};
     if (defined $sub) {
         return sort { $sub->($a, $b) } @{ $self->{data} };

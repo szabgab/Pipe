@@ -25,9 +25,9 @@ sub finish {
     return;
 }
 
-sub _log {
+sub logger {
     my ($self, $msg) = @_;
-    Pipe->_log($msg, $self);
+    Pipe->logger($msg, $self);
 }
 
 
