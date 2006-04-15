@@ -1,6 +1,14 @@
 
+v0.02 2006.04.14
+  New tubes:
+  - find
+  - print (was not working in previous release)
+  - say
+  - tuple
 
-Version 0.01 2006.04.12
-Initial release
+
+v0.01 2006.04.12
+
+  Initial release
 
 

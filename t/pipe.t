@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 36;
+use Test::More tests => 44;
 use Pipe;
 use Data::Dumper;
 #$Pipe::DEBUG = 1;
@@ -186,14 +186,67 @@ $SIG{__WARN__} = sub {$warn = shift;};
 {
     $warn = '';
     my @files = Pipe->find("t");
-    diag Dumper \@files;
+    #diag Dumper \@files;
     is $warn, '', "no warning";
 }
 
-
 #Pipe->cat("t/data/file1", "t/data/file2")->print;
-#Pipe->cat("t/data/file1", "t/data/file2")->print("out");
-#Pipe->cat("t/data/file1", "t/data/file2")->print(':a', "out");
+{
+    unlink "out";
+    $warn = '';
+    Pipe->cat("t/data/file1", "t/data/file2")->print("out");
+    is $warn, '', "no warning";
+    
+    @ARGV = ("t/data/file1", "t/data/file2");
+    my @expected = <>;
+    @ARGV = ("out");
+    my @received = <>;
+    is_deeply \@received, \@expected, "reading two files and piping through print to filename";
+}
+
+{
+    unlink "out";
+    $warn = '';
+    open my $out, ">", "out" or die $!;
+    Pipe->cat("t/data/file1", "t/data/file2")->print($out);
+    close $out;
+    is $warn, '', "no warning";
+
+    @ARGV = ("t/data/file1", "t/data/file2");
+    my @expected = <>;
+    @ARGV = ("out");
+    my @received = <>;
+    is_deeply \@received, \@expected, "reading two files and piping through print to filehandle";
+}
+
+#Pipe->cat("t/data/file1", "t/data/file2")->chomp->say;
+{
+    unlink "out";
+    $warn = '';
+    Pipe->cat("t/data/file1", "t/data/file2")->chomp->say("out");
+    is $warn, '', "no warning";
+    
+    @ARGV = ("t/data/file1", "t/data/file2");
+    my @expected = <>;
+    @ARGV = ("out");
+    my @received = <>;
+    is_deeply \@received, \@expected, "reading two files and piping through print to filename";
+}
+
+{
+    unlink "out";
+    $warn = '';
+    open my $out, ">", "out" or die $!;
+    Pipe->cat("t/data/file1", "t/data/file2")->chomp->say($out);
+    close $out;
+    is $warn, '', "no warning";
+
+    @ARGV = ("t/data/file1", "t/data/file2");
+    my @expected = <>;
+    @ARGV = ("out");
+    my @received = <>;
+    is_deeply \@received, \@expected, "reading two files and piping through print to filehandle";
+}
 
 
 

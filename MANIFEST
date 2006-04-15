@@ -16,6 +16,7 @@ lib/Pipe/Tube/Glob.pm
 lib/Pipe/Tube/Grep.pm
 lib/Pipe/Tube/Map.pm
 lib/Pipe/Tube/Print.pm
+lib/Pipe/Tube/Say.pm
 lib/Pipe/Tube/Sort.pm
 lib/Pipe/Tube/Uniq.pm
 
