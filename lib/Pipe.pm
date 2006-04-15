@@ -188,9 +188,27 @@ sorting function. The two values to be compared are passed to this function.
 
  Pipe->cat("t/data/numbers1")->chomp->sort( sub { $_[0] <=> $_[1] } );
 
+=head2 tuple
+
+Given one or more array references, on every iteration it will return an n-tuple
+(n is the number of arrays), one value from each source array.
+
+    my @a = qw(foo bar baz moo);
+    my @b = qw(23  37  77  42);
+
+    my @one_tuple = Pipe->tuple(\@a);
+    # @one_tuple is ['foo'], ['bar'], ['baz'], ['moo']
+
+    my @two_tuple = Pipe->tuple(\@a, \@b);
+    # @two_tuple is ['foo', 23], ['bar', 37], ['baz', 77], ['moo', 42]
+
+Input: disregards any input so it can be used as a starting element of a Pipe
+
+Ouput: array refs of n elements
+
 =head2 uniq
 
-Similary to the unix uniq command eliminate duplicate conscutive values.
+Similary to the unix uniq command eliminate duplicate consecutive values.
 
 23, 23, 19, 23     becomes  23, 19, 23
 
@@ -233,6 +251,97 @@ only after they have received all the input.
 
 You can call $self->logger("some message") from your tube. 
 It will be printed to pipe.log if someone sets $Pipe::DEBUG = 1;
+
+=head1 Examples
+
+A few examples of UNIX Shell commands combined with pipelines
+
+=over 4
+
+=item *
+
+cat several files together
+
+UNIX:
+
+ cat file1 file2 > filenew
+
+Perl:
+
+ open my $out, ">", "filenew" or die $!;
+ while (<>) {
+    print $out $_;
+ }
+
+
+Perl with Pipe:
+
+ perl -MPipe 'Pipe->cat(@ARG)->print("filenew")'
+
+=item *
+
+UNIX:
+
+ grep REGEX file* | uniq
+
+Perl:
+
+ my $last;
+ while (<>) {
+    next if not /REGEX/;
+
+    if (not defined $last) {
+        $last = $_;
+        print;
+        next;
+    }
+    next if $last eq $_;
+    $last = $_;
+    print;
+ }
+
+Perl with Pipe:
+
+one of these will work, we hope:
+
+ Pipe->grep(qr/REGEX/, <file*>)->uniq->print
+ Pipe->cat(<file*>)->grep(qr/REGEX/)->uniq->print
+ Pipe->files("file*")->cat->grep(qr/REGEX/)->uniq->print
+
+=item *
+
+UNIX:
+
+ find / -name filename -print 
+
+Perl with Pipe:
+
+ perl -MPipe -e'Pipe->find("/")->grep(qr/filename/)->print'
+
+=item *
+
+Delete all the CVS directories in a directory tree (from the journal of brian_d_foy)
+http://use.perl.org/~brian_d_foy/journal/29267
+
+UNIX:
+
+ find . -name CVS | xargs rm -rf
+
+ find . -name CVS -type d -exec rm -rf '{}' \;
+
+Perlish:
+
+ find2perl . -name CVS -type d -exec rm -rf '{}' \; > rm-cvs.pl
+ perl rm-cvs.pl
+
+Perl with Pipe:
+
+ perl -MPipe -e'Pipe->find(".")->grep(qr/^CVS$/)->rmtree;
+
+
+=back
+
+
 
 =head1 BUGS
 

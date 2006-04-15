@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 44;
+use Test::More tests => 46;
 use Pipe;
 use Data::Dumper;
 #$Pipe::DEBUG = 1;
@@ -249,4 +249,16 @@ $SIG{__WARN__} = sub {$warn = shift;};
 }
 
 
+{
+    my @a = qw(foo bar baz moo);
+    my @b = qw(23  37  77  42);
+
+    my @one_tuple = Pipe->tuple(\@a);
+    is_deeply \@one_tuple, [['foo'], ['bar'], ['baz'], ['moo']], "1-tuple";
+
+    my @two_tuple = Pipe->tuple(\@a, \@b);
+    is_deeply \@two_tuple, [['foo', 23], ['bar', 37], ['baz', 77], ['moo', 42]], "2-tuple";
+
+    # catch die in case array was passed insted of arrayref ?
+}
 
