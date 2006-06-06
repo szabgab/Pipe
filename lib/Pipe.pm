@@ -5,7 +5,7 @@ use warnings;
 use Want qw(want);
 our $DEBUG;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03_01';
 
 sub logger {
     my ($self, $msg, $class) = @_;
@@ -188,6 +188,17 @@ sorting function. The two values to be compared are passed to this function.
 
  Pipe->cat("t/data/numbers1")->chomp->sort( sub { $_[0] <=> $_[1] } );
 
+=heda2 split
+
+Given a regex (or a simple string), will split all the incoming strings and return
+an array reference for each row.
+
+Param: string or regex using qr//
+
+Input: string(s)
+
+Output: array reference(s)
+
 =head2 tuple
 
 Given one or more array references, on every iteration it will return an n-tuple
@@ -359,7 +370,7 @@ to Gaal Yahas
 
 Gabor Szabo <gabor@pti.co.il>
 
-=head1 Copyright
+=head1 COPYRIGHT
 
 Copyright 2006 by Gabor Szabo <gabor@pti.co.il>.
 
@@ -369,7 +380,7 @@ See http://www.perl.com/perl/misc/Artistic.html
 
 =head1 See Also
 
-L<Shell::Autobox>
+L<Shell::Autobox> and L<File::Tools>
 
 
 =cut
@@ -444,6 +455,16 @@ L<Shell::Autobox>
 # 
 #  split up the input stream and have more than one tails
 #
+
+# A tube might need to be able to terminate itself (or the whole pipe ?) without calling exit or die.
+#   We might allow any tube to tell the pipe to skip any further call to it.
+#   Or it can just decide it will keep calling  return; on every call except in finish() ?
+# 
+#
+
+# Trim
+
+# TODO: add 3rd parameter of split
  
 1;
 

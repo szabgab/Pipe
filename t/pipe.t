@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 46;
+use Test::More tests => 49;
 use Pipe;
 use Data::Dumper;
 #$Pipe::DEBUG = 1;
@@ -261,4 +261,28 @@ $SIG{__WARN__} = sub {$warn = shift;};
 
     # catch die in case array was passed insted of arrayref ?
 }
+
+
+{
+  my @input = (
+    "abc =   def",
+    "a=b",
+  );
+  my @result = Pipe->for(@input)->split(qr/\s*=\s*/);
+  is_deeply \@result, [ ["abc", "def"], ["a", "b"] ], "split with regex";
+
+  my @result_2 = Pipe->for(@input)->split("=");
+  is_deeply \@result_2, [ ["abc ", "   def"], ["a", "b"] ], "split with string";
+}
+
+{
+  my @input = (
+    "abc|bcd",
+    "a|b",
+  );
+  my @result = Pipe->for(@input)->split("|");
+  is_deeply \@result, [ ["abc", "bcd"], ["a", "b"] ], "split with | as string";
+}
+
+
 

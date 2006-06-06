@@ -18,6 +18,7 @@ lib/Pipe/Tube/Map.pm
 lib/Pipe/Tube/Print.pm
 lib/Pipe/Tube/Say.pm
 lib/Pipe/Tube/Sort.pm
+lib/Pipe/Tube/Split.pm
 lib/Pipe/Tube/Tuple.pm
 lib/Pipe/Tube/Uniq.pm
 
