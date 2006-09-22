@@ -26,3 +26,6 @@ t/pipe.t
 t/data/file1
 t/data/file2
 t/data/numbers1
+t/90-pod.t
+t/91-pod-coverage.t
+

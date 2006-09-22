@@ -25,6 +25,7 @@ AUTOLOAD {
     $module =~ s/=.*//;
     my $class = "Pipe::Tube::" . ucfirst $module;
     $self->logger("AUTOLOAD: '$AUTOLOAD', module: '$module', class: '$class'");
+    ## no critic (ProhibitStringyEval)
     eval "use $class";
     die "Could not load '$class' $@\n" if $@;
 
@@ -188,7 +189,7 @@ sorting function. The two values to be compared are passed to this function.
 
  Pipe->cat("t/data/numbers1")->chomp->sort( sub { $_[0] <=> $_[1] } );
 
-=heda2 split
+=head2 split
 
 Given a regex (or a simple string), will split all the incoming strings and return
 an array reference for each row.
