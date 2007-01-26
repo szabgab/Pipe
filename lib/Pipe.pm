@@ -5,7 +5,7 @@ use warnings;
 use Want qw(want);
 our $DEBUG;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub logger {
     my ($self, $msg, $class) = @_;
@@ -187,8 +187,6 @@ an anonymous function sub {}.
  ->map(  sub {  length $_[0] } );
 
 =item print
-
-TODO Not implemented yet
 
 Prints out its input.
 By default it prints to STDOUT but the user can supply a filename or a filehandle.

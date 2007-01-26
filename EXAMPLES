@@ -2,3 +2,70 @@
 mail my@address < file
 who | wc
 
+foreach file (`ls -F .. | grep /$ | cut -f1 -d/ | grep -v Main | grep -v Third_Party`)
+        ./unix/dos2unixAll.csh ../$file
+end
+
+unzip -o something.zip
+
+
+
+
+rm some files
+sleep
+run external program ``
+check the STDOUT of the that program if it is empty
+top -d 1 | grep PID    check if (grep the procid)
+
+- prepareing some command lines and executing external applications
+
+Checking command line arguments:
+
+if (("$1" == "")) then
+        echo "Syntax: $0 backup_to_directory"
+       exit
+endif
+
+copy some files:
+foreach file (`find /home/foo/install | grep "qqrq[0-9]"`)
+        cp $file ${1}/${file}
+end
+
+
+if [ ! -f /home/foo/bar.pl ]
+then
+echo "Can't find executable"
+exit
+fi
+case $1 in
+
+ 'start') echo "Starting App"
+           /home/foo/bar.pl start > /dev/null & 2>&1  ;;
+ 'stop') echo "Stopping App"
+            /home/foo/bar.pl stop > /dev/null & 2>&1 ;;
+ 'restart') echo "Restarting App"
+            /home/foo/bar.pl restart > /dev/null & 2>&1 ;;
+  *) echo "Usage : scriptname start/stop/restart" ;;
+esac
+
+
+find . | xargs touch -acm 07130000
+
+
+
+my $x = Pipe->x->tee->save;
+$x->a->b->c->save
+$x->z->q->save
+
+$x->run
+
+
+
+my $f = File::Find::Rule::rule(
+	file => 
+	start => ".",
+);
+while (my $e = $f->match) {
+	print "$e\n";
+}
+

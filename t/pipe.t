@@ -220,19 +220,30 @@ $SIG{__WARN__} = sub {$warn = shift;};
     BEGIN { $tests += 1; }
 }
 
-#Pipe->cat("t/data/file1", "t/data/file2")->print;
 {
     unlink "out";
     $warn = '';
-    Pipe->cat("t/data/file1", "t/data/file2")->print("out")->run;
+    @ARGV = ("t/data/file1", "t/data/file2");
+    Pipe->cat(@ARGV)->print("out")->run;
     is $warn, '', "no warning";
     
-    @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     @ARGV = ("out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filename";
     BEGIN { $tests += 2; }
+}
+
+# TODO: the following test passes when using prove but fails when running
+# ./Build test
+#
+{
+    @ARGV = ("t/data/file1", "t/data/file2");
+    my @received = `$^X t/print_stdout.pl @ARGV`;
+    my @expected = <>;
+
+    is_deeply \@received, \@expected, "reading two files and piping through print() ";
+    BEGIN { $tests += 1; }
 }
 
 {
