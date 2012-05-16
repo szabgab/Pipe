@@ -23,3 +23,9 @@
 \.bak$
 \#$
 \b\.#
+\.git
+^Pipe-\d
+^MYMETA
+
+EXAMPLES
+pipe.log
