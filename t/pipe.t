@@ -4,11 +4,12 @@ use warnings;
 
 use Data::Dumper;
 use Test::More;
+use Test::NoWarnings;
 
 use Pipe;
 
 my $tests;
-plan tests => $tests;
+plan tests => $tests+1;
 
 #$Pipe::DEBUG = 1;
 
