@@ -73,7 +73,7 @@ $SIG{__WARN__} = sub {$warn = shift;};
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     is_deeply \@input, \@expected, "reading two files";
-    
+
     BEGIN { $tests += 2; }
 }
 
@@ -204,14 +204,14 @@ $SIG{__WARN__} = sub {$warn = shift;};
     $warn = '';
     my @array_names   = qw(one two three);
     my @array_numbers = (1, 2, 3);
-    
+
     my @out = Pipe->for(@array_names)->run;
     is_deeply \@array_names, \@out, "for elements of array";
     is $warn, '', "no warning";
 
     #my @all = Pipe->pairs(\@array_names, \@array_numbers);
-    #my @expected = 
-    
+    #my @expected =
+
     BEGIN { $tests += 2; }
 }
 
@@ -229,7 +229,7 @@ $SIG{__WARN__} = sub {$warn = shift;};
     @ARGV = ("t/data/file1", "t/data/file2");
     Pipe->cat(@ARGV)->print("out")->run;
     is $warn, '', "no warning";
-    
+
     my @expected = <>;
     @ARGV = ("out");
     my @received = <>;
@@ -271,7 +271,7 @@ $SIG{__WARN__} = sub {$warn = shift;};
     $warn = '';
     Pipe->cat("t/data/file1", "t/data/file2")->chomp->say("out")->run;
     is $warn, '', "no warning";
-    
+
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     @ARGV = ("out");
