@@ -12,8 +12,6 @@ plan tests => $tests;
 
 #$Pipe::DEBUG = 1;
 
-my $warn;
-$SIG{__WARN__} = sub {$warn = shift;};
 
 {
     eval {Pipe->no_such();};
@@ -59,7 +57,8 @@ $SIG{__WARN__} = sub {$warn = shift;};
 
 # with a non-existing file, (give error message but go on processing)
 {
-    $warn = '';
+    my $warn = '';
+    local $SIG{__WARN__} = sub {$warn = shift;};
     my @input = Pipe->cat("t/data/file1", "t/data/file_not_there", "t/data/file2")->run;
     like $warn, qr{^\QCould not open 't/data/file_not_there'.}, "warn about a missing file";
     @ARGV = ("t/data/file1", "t/data/file2");
