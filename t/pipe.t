@@ -16,22 +16,18 @@ my $warn;
 $SIG{__WARN__} = sub {$warn = shift;};
 
 {
-    $warn = '';
     eval {Pipe->no_such();};
     like $@, qr{^Could not load 'Pipe::Tube::No_such'}, "exception on missing tube";
-    is $warn, '', "no warning";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 
 {
-    $warn = '';
     my $p = Pipe->cat();
     isa_ok($p, 'Pipe');
     my @input = $p->run;
-    is $warn, '', "no warning";
     is_deeply \@input, [], "empty array";
-    BEGIN { $tests += 3; }
+    BEGIN { $tests += 2; }
 }
 
 {
@@ -45,24 +41,20 @@ $SIG{__WARN__} = sub {$warn = shift;};
 
 
 {
-    $warn = '';
     my $p = Pipe->cat("t/data/file1");
     my @input = $p->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/file1");
     my @expected = <>;
     is_deeply \@input, \@expected, "reading one file";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @input = Pipe->cat("t/data/file1", "t/data/file2")->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     is_deeply \@input, \@expected, "reading two files";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 # with a non-existing file, (give error message but go on processing)
@@ -79,162 +71,134 @@ $SIG{__WARN__} = sub {$warn = shift;};
 
 
 {
-    $warn = '';
     my @input = Pipe->cat("t/data/file1", "t/data/file2")->chomp->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     chomp @expected;
     is_deeply \@input, \@expected, "reading two files and piping through chomp";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @input = Pipe->cat("t/data/numbers1")->uniq->chomp->run;
-    is $warn, '', "no warning";
     my @expected = (23, 17, 2, 43, 23);
     is_deeply \@input, \@expected, "reading a file and piping through uniq and chomp";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @input = Pipe->cat("t/data/numbers1")->chomp->uniq->run;
-    is $warn, '', "no warning";
     my @expected = (23, 17, 2, 43, 23);
     is_deeply \@input, \@expected, "reading a file and piping through chomp and uniq";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 
 
 {
-    $warn = '';
     my @input = Pipe->cat("t/data/file1", "t/data/file2")->grep(qr/test/)->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = grep /test/, <>;
     is_deeply \@input, \@expected, "reading two files and piping through grep with regex";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     #my @input = Pipe->cat("t/data/file1", "t/data/file2")->grep( sub { index($_[0], "testing") > -1 } )->run;
     my @input = Pipe->cat("t/data/file1", "t/data/file2")->grep( sub { index($_, "testing") > -1 } )->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = grep { index($_, "testing") > -1 } <>;
     is_deeply \@input, \@expected, "reading two files and piping through grep with block";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @input = Pipe->cat("t/data/numbers1")->chomp->sort->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/numbers1");
     my @expected = sort <>;
     chomp @expected;
     is_deeply \@input, \@expected, "reading file sorting";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @input = Pipe->cat("t/data/numbers1")->chomp->sort( sub { $_[0] <=> $_[1] } )->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/numbers1");
     my @expected = sort {$a <=> $b} <>;
     chomp @expected;
     is_deeply \@input, \@expected, "reading file sorting numerically";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @files = Pipe->glob("t/data/file*")->run;
-    is $warn, '', "no warning";
     my @expected = glob "t/data/file*";
     is_deeply \@files, \@expected, "glob on two files";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @input = Pipe->glob("t/data/file[12]")
         ->cat
         ->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     is_deeply \@input, \@expected, "reading two files and piping through another cat";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @input = Pipe->cat("t/data/file1", "t/data/file2")
                     ->map(  sub {{str => $_[0], long => length $_[0]}} )
                     ->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = map {{ str => $_, long => length $_}} <>;
     is_deeply \@input, \@expected, "reading two files and maping the lines";
 
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @input = Pipe->cat("t/data/file1", "t/data/file2")
                     ->map(  sub {{str => $_[0], long => length $_[0]}} )
                     ->sort( sub {$_[0]->{long} <=> $_[1]->{long}} )
                     ->map(  sub { $_[0]->{str} } )
                     ->run;
-    is $warn, '', "no warning";
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = sort {length $a <=> length $b} <>;
     is_deeply \@input, \@expected, "reading two files and piping through Schwartzian transformation";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
-    $warn = '';
     my @array_names   = qw(one two three);
     my @array_numbers = (1, 2, 3);
 
     my @out = Pipe->for(@array_names)->run;
     is_deeply \@array_names, \@out, "for elements of array";
-    is $warn, '', "no warning";
 
     #my @all = Pipe->pairs(\@array_names, \@array_numbers);
     #my @expected =
 
-    BEGIN { $tests += 2; }
-}
-
-{
-    $warn = '';
-    my @files = Pipe->find("t")->run;
-    #diag Dumper \@files;
-    is $warn, '', "no warning";
     BEGIN { $tests += 1; }
 }
 
 {
+    my @files = Pipe->find("t")->run;
+    #diag Dumper \@files;
+    #BEGIN { $tests += 1; }
+}
+
+{
     unlink "out";
-    $warn = '';
     @ARGV = ("t/data/file1", "t/data/file2");
     Pipe->cat(@ARGV)->print("out")->run;
-    is $warn, '', "no warning";
 
     my @expected = <>;
     @ARGV = ("out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filename";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 # TODO: the following test passes when using prove but fails when running
@@ -251,49 +215,43 @@ $SIG{__WARN__} = sub {$warn = shift;};
 
 {
     unlink "out";
-    $warn = '';
     open my $out, ">", "out" or die $!;
     Pipe->cat("t/data/file1", "t/data/file2")->print($out)->run;
     close $out;
-    is $warn, '', "no warning";
 
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     @ARGV = ("out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filehandle";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 #Pipe->cat("t/data/file1", "t/data/file2")->chomp->say->run;
 {
     unlink "out";
-    $warn = '';
     Pipe->cat("t/data/file1", "t/data/file2")->chomp->say("out")->run;
-    is $warn, '', "no warning";
 
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     @ARGV = ("out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filename";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 {
     unlink "out";
-    $warn = '';
     open my $out, ">", "out" or die $!;
     Pipe->cat("t/data/file1", "t/data/file2")->chomp->say($out)->run;
     close $out;
-    is $warn, '', "no warning";
 
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     @ARGV = ("out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filehandle";
-    BEGIN { $tests += 2; }
+    BEGIN { $tests += 1; }
 }
 
 
