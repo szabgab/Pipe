@@ -4,6 +4,8 @@ use warnings;
 
 use base 'Pipe::Tube';
 
+our $VERSION = '0.04';
+
 use File::Find::Rule;
 
 sub init {

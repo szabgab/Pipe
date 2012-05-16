@@ -4,6 +4,8 @@ use warnings;
 
 use base 'Pipe::Tube';
 
+our $VERSION = '0.04';
+
 sub init {
     my ($self, $file) = @_;
     # file can be either undef -> STDOUT or a filehandle, or a filename -> print into that file,

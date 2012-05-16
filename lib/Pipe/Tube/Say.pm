@@ -4,6 +4,7 @@ use warnings;
 
 use base 'Pipe::Tube::Print';
 
+our $VERSION = '0.04';
 
 
 sub run {

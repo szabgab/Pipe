@@ -4,6 +4,8 @@ use warnings;
 
 use base 'Pipe::Tube';
 
+our $VERSION = '0.04';
+
 sub init {
     my ($self, @values) = @_;
     $self->logger("Receiving values for for loop: " .  join "|", @values);

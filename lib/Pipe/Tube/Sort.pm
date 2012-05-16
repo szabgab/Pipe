@@ -4,6 +4,8 @@ use warnings;
 
 use base 'Pipe::Tube';
 
+our $VERSION = '0.04';
+
 sub init {
     my ($self, $expr) = @_;
     $self->logger("Receiving the sort expression: '" . (defined $expr ? $expr : '') .  "'");
