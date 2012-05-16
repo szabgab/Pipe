@@ -5,10 +5,13 @@ use warnings;
 use Data::Dumper;
 use Test::More;
 use Test::NoWarnings;
+use File::Temp qw(tempdir);
 
 use Pipe;
 
 plan tests => 29+1;
+
+my $dir = tempdir( CLEANUP => 1);
 
 #$Pipe::DEBUG = 1;
 
@@ -168,12 +171,11 @@ plan tests => 29+1;
 }
 
 {
-    unlink "out";
     @ARGV = ("t/data/file1", "t/data/file2");
-    Pipe->cat(@ARGV)->print("out")->run;
+    Pipe->cat(@ARGV)->print("$dir/out")->run;
 
     my @expected = <>;
-    @ARGV = ("out");
+    @ARGV = ("$dir/out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filename";
 }
@@ -190,39 +192,36 @@ plan tests => 29+1;
 #}
 
 {
-    unlink "out";
-    open my $out, ">", "out" or die $!;
+    open my $out, ">", "$dir/out" or die $!;
     Pipe->cat("t/data/file1", "t/data/file2")->print($out)->run;
     close $out;
 
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
-    @ARGV = ("out");
+    @ARGV = ("$dir/out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filehandle";
 }
 
 #Pipe->cat("t/data/file1", "t/data/file2")->chomp->say->run;
 {
-    unlink "out";
-    Pipe->cat("t/data/file1", "t/data/file2")->chomp->say("out")->run;
+    Pipe->cat("t/data/file1", "t/data/file2")->chomp->say("$dir/out3")->run;
 
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
-    @ARGV = ("out");
+    @ARGV = ("$dir/out3");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filename";
 }
 
 {
-    unlink "out";
-    open my $out, ">", "out" or die $!;
+    open my $out, ">", "$dir/out4" or die $!;
     Pipe->cat("t/data/file1", "t/data/file2")->chomp->say($out)->run;
     close $out;
 
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
-    @ARGV = ("out");
+    @ARGV = ("$dir/out4");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filehandle";
 }

@@ -11,6 +11,7 @@ my %opts = (
         'Test::More'          => '0.98',
         'Test::NoWarnings'    => '1.04',
         'File::Find::Rule'    => '0.33',
+        'File::Temp'          => 0,
     },
     META_MERGE        => {
        resources => {
