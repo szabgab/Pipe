@@ -1,6 +1,10 @@
 
+v0.04 2012.05.16
+  Moved to github
+  ExtUtils::MakeMaker instead of Module::Build
 
-v0.03
+
+v0.03 2006.09.22
   New tubes:
   - grep
 
