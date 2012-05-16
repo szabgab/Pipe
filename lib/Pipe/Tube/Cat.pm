@@ -9,7 +9,7 @@ our $VERSION = '0.04';
 sub init {
     my ($self, @files) = @_;
     @{ $self->{files} } = @files;
-    
+
     return $self;
 }
 
@@ -18,7 +18,7 @@ sub run {
     my ($self, @files) = @_;
 
     push @{ $self->{files} }, @files;
- 
+
     my $fh = $self->{fh};
     while (1) {
         if (not defined $fh) {

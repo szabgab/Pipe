@@ -9,17 +9,22 @@ our $VERSION = '0.04';
 
 sub logger {
     my ($self, $msg, $class) = @_;
+
     return if not $DEBUG;
+
     $class = $self if not $class;
     my $t = localtime;
     open my $fh, ">>", "pipe.log" or return;
     print $fh "[$t] [$class] $msg\n";
+
+    return;
 }
 
 our $AUTOLOAD;
 
 AUTOLOAD {
     my ($self) = @_;
+
     my $module = $AUTOLOAD;
     $module =~ s/.*:://;
     $module =~ s/=.*//;
@@ -253,16 +258,16 @@ values, it only eliminates consecutive duplicates.
 
 =head1 Building your own tube
 
-If you would like to build a tube called "thing" create a module called 
+If you would like to build a tube called "thing" create a module called
 Pipe::Tube::Thing that inherits from Pipe::Tube, our abstract Tube.
 
 Implement one or more of these methods in your subclass as you please.
 
-=over 4 
+=over 4
 
 =item init
 
-Will be called once when initializing the pipeline. 
+Will be called once when initializing the pipeline.
 It will get ($self, @args)  where $self is the Pipe::Tube::Thing object
 and @args are the values given as parameters to the ->thing(@args) call
 in the pipeline.
@@ -280,7 +285,7 @@ Will be called once when the Pipe Manager notices that this Thing should be fini
 This happens when Thing is the first active element in the pipe (all the previous tubes
 have already finshed) and its run() method returns an empty list.
 
-The finish() method should return a list of values that will be passed on to the next 
+The finish() method should return a list of values that will be passed on to the next
 tube in the pipe. This is especially useful for Tubes such as sort that can to their thing
 only after they have received all the input.
 
@@ -288,7 +293,7 @@ only after they have received all the input.
 
 =head2 Debugging your tube
 
-You can call $self->logger("some message") from your tube. 
+You can call $self->logger("some message") from your tube.
 It will be printed to pipe.log if someone sets $Pipe::DEBUG = 1;
 
 =head1 Examples
