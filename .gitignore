@@ -7,3 +7,4 @@ Pipe-*
 blib/
 pipe.log
 pm_to_blib
+*.swp
