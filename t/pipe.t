@@ -8,8 +8,7 @@ use Test::NoWarnings;
 
 use Pipe;
 
-my $tests;
-plan tests => $tests+1;
+plan tests => 29+1;
 
 #$Pipe::DEBUG = 1;
 
@@ -17,7 +16,6 @@ plan tests => $tests+1;
 {
     eval {Pipe->no_such();};
     like $@, qr{^Could not load 'Pipe::Tube::No_such'}, "exception on missing tube";
-    BEGIN { $tests += 1; }
 }
 
 
@@ -26,7 +24,6 @@ plan tests => $tests+1;
     isa_ok($p, 'Pipe');
     my @input = $p->run;
     is_deeply \@input, [], "empty array";
-    BEGIN { $tests += 2; }
 }
 
 {
@@ -35,7 +32,6 @@ plan tests => $tests+1;
     Pipe->cat();
     ok -e "pipe.log", "log was created";
     $Pipe::DEBUG = 0;
-    BEGIN { $tests += 1; }
 }
 
 
@@ -45,7 +41,6 @@ plan tests => $tests+1;
     @ARGV = ("t/data/file1");
     my @expected = <>;
     is_deeply \@input, \@expected, "reading one file";
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -53,7 +48,6 @@ plan tests => $tests+1;
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     is_deeply \@input, \@expected, "reading two files";
-    BEGIN { $tests += 1; }
 }
 
 # with a non-existing file, (give error message but go on processing)
@@ -65,8 +59,6 @@ plan tests => $tests+1;
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     is_deeply \@input, \@expected, "reading two files";
-
-    BEGIN { $tests += 2; }
 }
 
 
@@ -76,21 +68,18 @@ plan tests => $tests+1;
     my @expected = <>;
     chomp @expected;
     is_deeply \@input, \@expected, "reading two files and piping through chomp";
-    BEGIN { $tests += 1; }
 }
 
 {
     my @input = Pipe->cat("t/data/numbers1")->uniq->chomp->run;
     my @expected = (23, 17, 2, 43, 23);
     is_deeply \@input, \@expected, "reading a file and piping through uniq and chomp";
-    BEGIN { $tests += 1; }
 }
 
 {
     my @input = Pipe->cat("t/data/numbers1")->chomp->uniq->run;
     my @expected = (23, 17, 2, 43, 23);
     is_deeply \@input, \@expected, "reading a file and piping through chomp and uniq";
-    BEGIN { $tests += 1; }
 }
 
 
@@ -100,7 +89,6 @@ plan tests => $tests+1;
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = grep /test/, <>;
     is_deeply \@input, \@expected, "reading two files and piping through grep with regex";
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -109,7 +97,6 @@ plan tests => $tests+1;
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = grep { index($_, "testing") > -1 } <>;
     is_deeply \@input, \@expected, "reading two files and piping through grep with block";
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -118,7 +105,6 @@ plan tests => $tests+1;
     my @expected = sort <>;
     chomp @expected;
     is_deeply \@input, \@expected, "reading file sorting";
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -127,14 +113,12 @@ plan tests => $tests+1;
     my @expected = sort {$a <=> $b} <>;
     chomp @expected;
     is_deeply \@input, \@expected, "reading file sorting numerically";
-    BEGIN { $tests += 1; }
 }
 
 {
     my @files = Pipe->glob("t/data/file*")->run;
     my @expected = glob "t/data/file*";
     is_deeply \@files, \@expected, "glob on two files";
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -144,7 +128,6 @@ plan tests => $tests+1;
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = <>;
     is_deeply \@input, \@expected, "reading two files and piping through another cat";
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -154,8 +137,6 @@ plan tests => $tests+1;
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = map {{ str => $_, long => length $_}} <>;
     is_deeply \@input, \@expected, "reading two files and maping the lines";
-
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -167,7 +148,6 @@ plan tests => $tests+1;
     @ARGV = ("t/data/file1", "t/data/file2");
     my @expected = sort {length $a <=> length $b} <>;
     is_deeply \@input, \@expected, "reading two files and piping through Schwartzian transformation";
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -179,8 +159,6 @@ plan tests => $tests+1;
 
     #my @all = Pipe->pairs(\@array_names, \@array_numbers);
     #my @expected =
-
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -198,7 +176,6 @@ plan tests => $tests+1;
     @ARGV = ("out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filename";
-    BEGIN { $tests += 1; }
 }
 
 # TODO: the following test passes when using prove but fails when running
@@ -210,7 +187,6 @@ plan tests => $tests+1;
 #    my @expected = <>;
 #
 #    is_deeply \@received, \@expected, "reading two files and piping through print() ";
-#    BEGIN { $tests += 1; }
 #}
 
 {
@@ -224,7 +200,6 @@ plan tests => $tests+1;
     @ARGV = ("out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filehandle";
-    BEGIN { $tests += 1; }
 }
 
 #Pipe->cat("t/data/file1", "t/data/file2")->chomp->say->run;
@@ -237,7 +212,6 @@ plan tests => $tests+1;
     @ARGV = ("out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filename";
-    BEGIN { $tests += 1; }
 }
 
 {
@@ -251,7 +225,6 @@ plan tests => $tests+1;
     @ARGV = ("out");
     my @received = <>;
     is_deeply \@received, \@expected, "reading two files and piping through print to filehandle";
-    BEGIN { $tests += 1; }
 }
 
 
@@ -266,7 +239,6 @@ plan tests => $tests+1;
     is_deeply \@two_tuple, [['foo', 23], ['bar', 37], ['baz', 77], ['moo', 42]], "2-tuple";
 
     # catch die in case array was passed insted of arrayref ?
-    BEGIN { $tests += 2; }
 }
 
 
@@ -280,7 +252,6 @@ plan tests => $tests+1;
 
     my @result_2 = Pipe->for(@input)->split("=")->run;
     is_deeply \@result_2, [ ["abc ", "   def"], ["a", "b"] ], "split with string";
-    BEGIN { $tests += 2; }
 }
 
 {
@@ -290,7 +261,6 @@ plan tests => $tests+1;
     );
     my @result = Pipe->for(@input)->split("|")->run;
     is_deeply \@result, [ ["abc", "bcd"], ["a", "b"] ], "split with | as string";
-    BEGIN { $tests += 1; }
 }
 
 
