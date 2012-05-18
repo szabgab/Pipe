@@ -5,7 +5,7 @@ use warnings;
 use Want qw(want);
 our $DEBUG;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 sub logger {
     my ($self, $msg, $class) = @_;
