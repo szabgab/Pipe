@@ -1,5 +1,7 @@
 v0.05 2012.05.18
   Move author tests to xt
+  Avoid sort in scalar context
+  Add perl 5.006 as prerequisite
 
 v0.04 2012.05.16
   Moved to github

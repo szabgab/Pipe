@@ -1,6 +1,7 @@
 package Pipe::Tube::Sort;
 use strict;
 use warnings;
+use 5.006;
 
 use base 'Pipe::Tube';
 

@@ -1,10 +1,11 @@
 package Pipe::Tube::For;
 use strict;
 use warnings;
+use 5.006;
 
 use base 'Pipe::Tube';
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 sub init {
     my ($self, @values) = @_;

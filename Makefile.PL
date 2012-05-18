@@ -1,4 +1,5 @@
 use ExtUtils::MakeMaker;
+use 5.006;
 
 my %opts = (
     NAME	     => 'Pipe',

@@ -1,6 +1,7 @@
 package Pipe;
 use strict;
 use warnings;
+use 5.006;
 
 use Want qw(want);
 our $DEBUG;
