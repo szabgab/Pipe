@@ -4,8 +4,8 @@ use 5.006;
 my %opts = (
     NAME	     => 'Pipe',
     VERSION_FROM => 'lib/Pipe.pm',
+    ABSTRACT_FROM => 'lib/Pipe.pm',
     AUTHOR       => 'Gabor Szabo <gabor@szabgab.com>',
-    ABSTRACT     => 'Framework for creating pipes using iterators',
     LICENSE      => 'perl',
     PREREQ_PM    => {
         'Want'                => '0.21',

@@ -96,7 +96,7 @@ DESTROY {
 
 =head1 NAME
 
-Pipe - Framework to create pipes using iterators
+Pipe - Framework for creating pipes using iterators
 
 =head1 SYNOPSIS
 
