@@ -6,7 +6,7 @@ use 5.006;
 use Want qw(want);
 our $DEBUG;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 sub logger {
     my ($self, $msg, $class) = @_;
