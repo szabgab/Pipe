@@ -1,6 +1,7 @@
-
+v0.06 2023.06.01
   Link to issues from META files
   Add GitHub Actions
+  Add list of build dependencies
 
 v0.05 2012.05.18
   Move author tests to xt
