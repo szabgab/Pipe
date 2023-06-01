@@ -14,11 +14,19 @@ my %opts = (
         'File::Find::Rule'    => '0.33',
         'File::Temp'          => 0,
     },
-    META_MERGE        => {
-       resources => {
-           repository  =>  'https://github.com/szabgab/Pipe',
-       },
-	},
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+         resources => {
+             repository => {
+                 type => 'git',
+                 url  => 'https://github.com/szabgab/Pipe.git',
+                 web  => 'https://github.com/szabgab/Pipe',
+             },
+             bugtracker => {
+                 web => 'https://github.com/szabgab/Pipe/issues'
+             },
+         },
+    },
 );
 
 WriteMakefile( %opts );
