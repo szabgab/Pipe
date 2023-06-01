@@ -6,8 +6,10 @@
 * Update the Chnages file
 * git tag
 
-    perl Makefile.PL
-    make
-    make test
-    make manifest
-    make dist
+```
+perl Makefile.PL
+make
+make test
+make manifest
+make dist
+```
