@@ -2,7 +2,7 @@ use ExtUtils::MakeMaker;
 use 5.006;
 
 my %opts = (
-    NAME	     => 'Pipe',
+    NAME         => 'Pipe',
     VERSION_FROM => 'lib/Pipe.pm',
     ABSTRACT_FROM => 'lib/Pipe.pm',
     AUTHOR       => 'Gabor Szabo <gabor@szabgab.com>',
@@ -13,6 +13,11 @@ my %opts = (
         'Test::NoWarnings'    => '1.04',
         'File::Find::Rule'    => '0.33',
         'File::Temp'          => 0,
+    },
+    BUILD_REQUIRES => {
+        'Test::Pod'           => '1.00',
+        'Test::Pod::Coverage' => '1.00',
+        'Test::Perl::Critic'  => '0',
     },
     META_MERGE => {
         'meta-spec' => { version => 2 },
