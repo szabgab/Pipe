@@ -49,5 +49,6 @@ jobs:
         perl Makefile.PL
         make
         make test
+        prove -l xt
 
 
